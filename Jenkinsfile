@@ -35,16 +35,16 @@ pipeline {
         //     }
         // }
 
-        stage('Build backend Docker Image') {
-            steps {
-                script {
-                    echo 'Build backend Docker Image'
-                    def version = sh(script: "cd api && cat package.json | grep '\"version\"' | cut -d '\"' -f 4", returnStdout: true).trim()
-                    sh "cd api && sudo docker build --build-arg VERSION=${version} -t ahmed12shire/lms-be ."
-                    echo 'Image build complete'
-                }
-            }
-        }
+        // stage('Build backend Docker Image') {
+        //     steps {
+        //         script {
+        //             echo 'Build backend Docker Image'
+        //             def version = sh(script: "cd api && cat package.json | grep '\"version\"' | cut -d '\"' -f 4", returnStdout: true).trim()
+        //             sh "cd api && sudo docker build --build-arg VERSION=${version} -t ahmed12shire/lms-be ."
+        //             echo 'Image build complete'
+        //         }
+        //     }
+        // }
 
 
 //         stage('Push backend Docker Image') {
@@ -59,10 +59,10 @@ pipeline {
         stage('backend deplyment & service') {
             steps {
                 script {
-                    echo 'apply backend deplyment & service'
-                    sh "cd api && kubectl apply -f backend-configmap.yml"
-                    sh "kubectl apply -f backend-deployment.yml"
-                    sh "kubectl apply -f backend-service.yml"
+                    // echo 'apply backend deplyment & service'
+                    // sh "cd api && kubectl apply -f backend-configmap.yml"
+                    sh "cd api && kubectl apply -f backend-deployment.yml"
+                    sh "cd api && kubectl apply -f backend-service.yml"
                     echo 'Database container is running'
                 }
             }
