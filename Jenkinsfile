@@ -40,7 +40,7 @@ pipeline {
                 script {
                     echo 'Build backend Docker Image'
                     def version = sh(script: "cd api && cat package.json | grep '\"version\"' | cut -d '\"' -f 4", returnStdout: true).trim()
-                    sh "cd api && docker build --build-arg VERSION=${version} -t ahmed12shire/lms-backend-j ."
+                    sh "cd api && sudo docker build --build-arg VERSION=${version} -t ahmed12shire/lms-be ."
                     echo 'Image build complete'
                 }
             }
