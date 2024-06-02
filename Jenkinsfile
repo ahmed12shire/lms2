@@ -26,11 +26,11 @@ pipeline {
                 script {
                     echo 'apply PostgreSQL deplyment & service'
                     // sh ('aws eks update-kubeconfig --name lms --region ca-central-1')
-                    sh "kubectl get pods"
-                    sh "cd api && kubectl apply -f database-secret.yml"
-                    // sh "kubectl apply -f database-deployment.yml"
-                    // sh "kubectl apply -f database-service.yml"
-                    // echo 'Database container is running'
+                    // sh "kubectl get pods"
+                    // sh "cd api && kubectl apply -f database-secret.yml"
+                    sh "kubectl apply -f database-deployment.yml"
+                    sh "kubectl apply -f database-service.yml"
+                    echo 'Database container is running'
                 }
             }
         }
