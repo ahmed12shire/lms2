@@ -29,7 +29,7 @@ pipeline {
                     // sh "kubectl get pods"
                     // sh "cd api && kubectl apply -f database-secret.yml"
                     // sh "cd api && kubectl apply -f database-deployment.yml"
-                    sh "cd api && kubectl apply -f database-service.yml"
+                    sh "cd api && kubectl apply -f database-sevice.yml"
                     echo 'Database container is running'
                 }
             }
