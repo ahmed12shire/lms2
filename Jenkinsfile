@@ -21,30 +21,31 @@ pipeline {
         //     }
         // }
 
-        stage('PostgreSQL deplyment & service') {
+        // stage('PostgreSQL deplyment & service') {
+        //     steps {
+        //         script {
+        //             echo 'apply PostgreSQL deplyment & service'
+        //             sh ('aws eks update-kubeconfig --name lms --region ca-central-1')
+        //             sh "kubectl get pods"
+        //             sh "cd api && kubectl apply -f database-secret.yml"
+        //             sh "cd api && kubectl apply -f database-deployment.yml"
+        //             sh "cd api && kubectl apply -f database-sevice.yml"
+        //             echo 'Database container is running'
+        //         }
+        //     }
+        // }
+
+        stage('Build backend Docker Image') {
             steps {
                 script {
-                    echo 'apply PostgreSQL deplyment & service'
-                    // sh ('aws eks update-kubeconfig --name lms --region ca-central-1')
-                    // sh "kubectl get pods"
-                    // sh "cd api && kubectl apply -f database-secret.yml"
-                    // sh "cd api && kubectl apply -f database-deployment.yml"
-                    sh "cd api && kubectl apply -f database-sevice.yml"
-                    echo 'Database container is running'
+                    echo 'Build backend Docker Image'
+                    def version = sh(script: "cd api && cat package.json | grep '\"version\"' | cut -d '\"' -f 4", returnStdout: true).trim()
+                    sh "cd api && docker build --build-arg VERSION=${version} -t ahmed12shire/lms-backend-j ."
+                    echo 'Image build complete'
                 }
             }
         }
 
-//         stage('Build backend Docker Image') {
-//             steps {
-//                 script {
-//                     echo 'Build backend Docker Image'
-//                     def version = sh(script: "cd api && cat package.json | grep '\"version\"' | cut -d '\"' -f 4", returnStdout: true).trim()
-//                     sh "cd api && docker build --build-arg VERSION=${version} -t ahmed12shire/lms-backend-j ."
-//                     echo 'Image build complete'
-//                 }
-//             }
-//         }
 
 //         stage('Push backend Docker Image') {
 //             steps {
@@ -55,15 +56,17 @@ pipeline {
 //             }
 //         }
 
-//         stage('Run backend Docker Container') {
-//             steps {
-//                 script {
-//                     echo 'Running backend container'
-//                     sh "docker run -d --name lms-backend-j -p 8080:8080 ahmed12shire/lms-backend-j"
-//                     echo 'Backend container is running'
-//                 }
-//             }
-//         }
+        stage('backend deplyment & service') {
+            steps {
+                script {
+                    echo 'apply backend deplyment & service'
+                    sh "cd api && kubectl apply -f backend-configmap.yml"
+                    sh "kubectl apply -f backend-deployment.yml"
+                    sh "kubectl apply -f backend-service.yml"
+                    echo 'Database container is running'
+                }
+            }
+        }
 
 //         stage('Build frontend Docker Image') {
 //             steps {
@@ -85,14 +88,18 @@ pipeline {
 //             }
 //         }
 
-//         stage('Run frontend Docker Container') {
-//             steps {
-//                 script {
-//                     echo 'Running frontend container'
-//                     sh "docker run -d --name lms-frontend-j -p 80:80 ahmed12shire/lms-frontend-j"
-//                     echo 'Backend container is running'
-//                 }
-//             }
-//         }
+        // stage('frontend deplyment & service') {
+        //     steps {
+        //         script {
+        //             echo 'apply frontend deplyment & service'
+        //             sh ('aws eks update-kubeconfig --name lms --region ca-central-1')
+        //             sh "kubectl get pods"
+        //             sh "cd api && kubectl apply -f database-secret.yml"
+        //             sh "cd api && kubectl apply -f database-deployment.yml"
+        //             sh "cd api && kubectl apply -f database-sevice.yml"
+        //             echo 'Database container is running'
+        //         }
+        //     }
+        // }
     }
 }
