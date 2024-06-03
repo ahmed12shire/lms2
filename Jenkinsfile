@@ -10,16 +10,16 @@ pipeline {
     //         }
     //     }
 
-        // stage('Docker Login') {
-        //     steps {
-        //         script {
-        //             // Docker login
-        //             withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-        //                 sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Docker Login') {
+            steps {
+                script {
+                    // Docker login
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                        sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                    }
+                }
+            }
+        }
 
         // stage('PostgreSQL deplyment & service') {
         //     steps {
