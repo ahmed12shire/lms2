@@ -2,6 +2,13 @@ pipeline {
     agent any
 
     stages {
+        
+        stage('nofity') {
+            steps {
+               slackSend channel: 'lms-project', color: '#439FE0', message: 'slackSend "started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+            }
+        }
+        
         stage('Sonar Analysis') {
             steps {
                 echo 'CODE QUALITY CHECK'
@@ -107,3 +114,4 @@ pipeline {
         }
     }
 }
+
