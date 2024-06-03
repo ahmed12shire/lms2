@@ -10,16 +10,16 @@ pipeline {
     //         }
     //     }
 
-        stage('Docker Login') {
-            steps {
-                script {
-                    // Docker login
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                        sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                    }
-                }
-            }
-        }
+        // stage('Docker Login') {
+        //     steps {
+        //         script {
+        //             // Docker login
+        //             withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+        //                 sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+        //             }
+        //         }
+        //     }
+        // }
 
         // stage('PostgreSQL deplyment & service') {
         //     steps {
@@ -55,21 +55,21 @@ pipeline {
         // }
 
 
-        stage('Push backend Docker Image') {
-            steps {
-                script {
-                    // Push Docker image
-                    sh "docker push ahmed12shire/lms-be"
-                }
-            }
-        }
+        // stage('Push backend Docker Image') {
+        //     steps {
+        //         script {
+        //             // Push Docker image
+        //             sh "docker push ahmed12shire/lms-be"
+        //         }
+        //     }
+        // }
 
         stage('backend deplyment & service') {
             steps {
                 script {
-                    echo 'apply backend deplyment & service'
-                    sh "cd api && kubectl apply -f backend-deployment.yml"
-                    sh "cd api && kubectl apply -f backend-sevice.yml"
+        //             echo 'apply backend deplyment & service'
+        //             sh "cd api && kubectl apply -f backend-deployment.yml"
+                    sh "cd api && kubectl apply -f backend-service.yml"
                     echo 'Database container is running'
                 }
             }
