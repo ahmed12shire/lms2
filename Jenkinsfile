@@ -31,7 +31,7 @@ pipeline {
              steps {
                 script {
             // Send message to Slack for approval
-            def approvalMessage = "Deployment approval needed from Ahmed Shire. Please approve or reject this deployment in Slack."
+            def approvalMessage = "Deployment approval needed from ahmed shire. Please approve or reject this deployment in Slack."
             def approvalResponse = slackSend(channel: 'lms-project', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend', message: approvalMessage)
             // Wait for 1 minute
             sleep(time: 1, unit: 'MINUTES')
@@ -51,7 +51,7 @@ pipeline {
     }
 }
             def waitForApproval(approvalResponse) {
-            // Assuming approvalResponse contains the text received from Slack
+            // approvalResponse contains the text received from Slack
             if (approvalResponse.contains("approved")) {
             return true
             } else {
