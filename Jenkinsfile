@@ -27,26 +27,36 @@ pipeline {
         //         }
         //     }
         // }
-        stage('Deploy approvel request') {
-            steps {
+        stage('Deploy approval request') {
+             steps {
                 script {
-                    // Send message to Slack for approval
-                    def approvalMessage = "Deployment approval needed from Ahmed Shire. Please approve or reject this deployment in Slack."
-                    def approvalResponse = slackSend(channel: 'lms-project', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend', message: approvalMessage)
+            // Send message to Slack for approval
+            def approvalMessage = "Deployment approval needed from Ahmed Shire. Please approve or reject this deployment in Slack."
+            def approvalResponse = slackSend(channel: 'lms-project', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend', message: approvalMessage)
 
-                    // Wait for approval
-                    def isApproved = waitForApproval(approvalResponse)
+            // Wait for approval
+            def isApproved = waitForApproval(approvalResponse)
 
-                    if (isApproved) {
-                        echo "Deployment approved. Proceeding to the next stage."
-                        // Proceed to the next stage
-                        // Insert your deployment steps here
-                    } else {
-                        error "Deployment rejected. Aborting deployment process."
-                    }
-                }
+            if (isApproved) {
+                echo "Deployment approved. Proceeding to the next stage."
+                // Proceed to the next stage
+                // Insert your deployment steps here
+            } else {
+                error "Deployment rejected. Aborting deployment process."
             }
         }
+    }
+}
+
+            def waitForApproval(approvalResponse) {
+    // Assuming approvalResponse contains the text received from Slack
+            if (approvalResponse.contains("approved")) {
+            return true
+            } else {
+            return false
+    }
+}
+
 //         stage('PostgreSQL deplyment & service') {
 //             steps {
 //                 script {
