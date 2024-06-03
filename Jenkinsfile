@@ -33,7 +33,8 @@ pipeline {
             // Send message to Slack for approval
             def approvalMessage = "Deployment approval needed from Ahmed Shire. Please approve or reject this deployment in Slack."
             def approvalResponse = slackSend(channel: 'lms-project', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend', message: approvalMessage)
-
+            // Wait for 1 minute
+            sleep(time: 1, unit: 'MINUTES')
             // Wait for approval
             def isApproved = waitForApproval(approvalResponse)
 
