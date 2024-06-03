@@ -47,7 +47,8 @@ pipeline {
         }
     }
 }
-
+    }
+}
             def waitForApproval(approvalResponse) {
             // Assuming approvalResponse contains the text received from Slack
             if (approvalResponse.contains("approved")) {
@@ -141,6 +142,6 @@ pipeline {
 //                 }
 //             }
 //         }
-    }
-}
+//     }
+// }
 
