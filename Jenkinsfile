@@ -64,49 +64,46 @@ pipeline {
         //     }
         // }
 
-        stage('backend deplyment & service') {
-            steps {
-                script {
-        //             echo 'apply backend deplyment & service'
-        //             sh "cd api && kubectl apply -f backend-deployment.yml"
-                    sh "cd api && kubectl apply -f backend-service.yml"
-                    echo 'Database container is running'
-                }
-            }
-        }
-
-//         stage('Build frontend Docker Image') {
-//             steps {
-//                 script {
-//                     echo 'Build Docker Backend Image'
-//                     def version = sh(script: "cd webapp && cat package.json | grep '\"version\"' | cut -d '\"' -f 4", returnStdout: true).trim()
-//                     sh "cd webapp && docker build --build-arg VERSION=${version} -t ahmed12shire/lms-frontend-j ."
-//                     echo 'Image build complete'
-//                 }
-//             }
-//         }
-
-//         stage('Push frontend Docker Image') {
-//             steps {
-//                 script {
-//                     // Push Docker image
-//                     sh "docker push ahmed12shire/lms-frontend-j"
-//                 }
-//             }
-//         }
-
-        // stage('frontend deplyment & service') {
+        // stage('backend deplyment & service') {
         //     steps {
         //         script {
-        //             echo 'apply frontend deplyment & service'
-        //             sh ('aws eks update-kubeconfig --name lms --region ca-central-1')
-        //             sh "kubectl get pods"
-        //             sh "cd api && kubectl apply -f database-secret.yml"
-        //             sh "cd api && kubectl apply -f database-deployment.yml"
-        //             sh "cd api && kubectl apply -f database-sevice.yml"
+        // //             echo 'apply backend deplyment & service'
+        // //             sh "cd api && kubectl apply -f backend-deployment.yml"
+        //             sh "cd api && kubectl apply -f backend-service.yml"
         //             echo 'Database container is running'
         //         }
         //     }
         // }
+
+        stage('Build frontend Docker Image') {
+            steps {
+                script {
+                    echo 'Build Docker Backend Image'
+                    def version = sh(script: "cd webapp && cat package.json | grep '\"version\"' | cut -d '\"' -f 4", returnStdout: true).trim()
+                    sh "cd webapp && docker build --build-arg VERSION=${version} -t ahmed12shire/lms-fe ."
+                    echo 'Image build complete'
+                }
+            }
+        }
+
+        stage('Push frontend Docker Image') {
+            steps {
+                script {
+                    // Push Docker image
+                    sh "docker push ahmed12shire/lms-fe"
+                }
+            }
+        }
+
+        stage('frontend deplyment & service') {
+            steps {
+                script {
+                    echo 'apply frontend deplyment & service'
+                    sh "cd api && kubectl apply -f frontend-deployment.yml"
+                    sh "cd api && kubectl apply -f frontend-service.yml"
+                    echo 'frontend container is running'
+                }
+            }
+        }
     }
 }
