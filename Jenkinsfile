@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        
+
         stage('nofity') {
             steps {
                slackSend channel: 'lms-project', color: '#439FE0', message: 'slackSend "started ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
@@ -12,7 +12,7 @@ pipeline {
         stage('Sonar Analysis') {
             steps {
                 echo 'CODE QUALITY CHECK'
-                sh 'cd webapp && sudo docker run --rm -e SONAR_HOST_URL="http://3.96.171.159:9000" -e SONAR_TOKEN="sqp_15550378958d0e0e7ff45fbd03695ef1e832ec69" -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
+                sh 'cd webapp && sudo docker run --rm -e SONAR_HOST_URL="http://3.98.148.249:9000" -e SONAR_TOKEN="sqp_15550378958d0e0e7ff45fbd03695ef1e832ec69" -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
                 echo 'CODE QUALITY DONE'
             }
         }
