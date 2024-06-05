@@ -11,7 +11,7 @@ pipeline {
         stage('Sonar Analysis') {
             steps {
                 echo 'CODE QUALITY CHECK'
-                sh 'sudo docker run --rm -e SONAR_HOST_URL="http://35.182.242.54:9000" -e SONAR_TOKEN="sqp_10591a74b581689f5a409f61dd74a1d50544c669" -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
+                sh 'sudo docker run --rm -e SONAR_HOST_URL="http://35.182.242.54:9000" -e SONAR_TOKEN="sqp_40decc8be7549a419301a10af4ec6f924f3a36d9" -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
                 echo 'CODE QUALITY DONE'
                 slackSend channel: 'eks', color: '#439FE0', message: 'Sonar Analysis completed', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
             }
@@ -88,7 +88,7 @@ pipeline {
             steps {
                 script {
                     // Push Docker image
-                    sh "docker push ahmed12shire/lms-be:${version}"
+                    sh "docker push ahmed12shire/lms-be"
                 }
                 slackSend channel: 'eks', color: '#439FE0', message: 'Backened imager pushed', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
             }
@@ -124,7 +124,7 @@ pipeline {
             steps {
                 script {
                     // Push Docker image
-                    sh "docker push ahmed12shire/lms-fe:${version}"
+                    sh "docker push ahmed12shire/lms-fe"
                 }
                 slackSend channel: 'eks', color: '#439FE0', message: 'Frontend imager pushed', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
             }
