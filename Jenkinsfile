@@ -3,8 +3,8 @@ pipeline {
 
     stages {
         post {
-        always {
-            slackSend channel: 'eks', color: '#439FE0', message: "Build ${currentBuild.currentResult} in ${env.JOB_NAME}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+            always {
+                slackSend channel: 'eks', color: '#439FE0', message: "Build ${currentBuild.currentResult} in ${env.JOB_NAME}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
         }
     } 
     //     stage('Sonar Analysis') {
