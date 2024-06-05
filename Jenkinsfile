@@ -41,7 +41,7 @@ pipeline {
         }
     }
 }
-        stage('nofity') {
+        stage('nofity after approval') {
             steps {
                slackSend channel: 'eks', color: '#439FE0', message: 'slackSend "started LMS production"', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
             }
