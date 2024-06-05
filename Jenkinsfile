@@ -136,7 +136,7 @@ pipeline {
         
     }
         post {
-        FAILURE {
+        failure {
             slackSend channel: 'eks', color: 'green', message: "Pipeline failed: ${env.STAGE-NAME} - ${currentBuild.fullDisplayName}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
         }
         success {
