@@ -11,7 +11,7 @@ pipeline {
         stage('Sonar Analysis') {
             steps {
                 echo 'CODE QUALITY CHECK'
-                sh 'sudo docker run --rm -e SONAR_HOST_URL="http://15.222.239.12:9000" -e SONAR_TOKEN="sqp_1cdd446e0fc471a2c8e8ed8fb9138801896aaa72" -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
+                sh 'sudo docker run --rm -e SONAR_HOST_URL="http://35.182.242.54:9000" -e SONAR_TOKEN="sqp_6d29ea7971f90ddff8bfba0d9aef6814ae2f9a36" -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
                 echo 'CODE QUALITY DONE'
                 slackSend channel: 'eks', color: '#439FE0', message: 'Sonar Analysis completed', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
             }
@@ -32,7 +32,7 @@ pipeline {
             steps {
                  script{
                 timeout(time: 5,unit: "MINUTES"){
-                slackSend channel: ' team-updates', message: "slackSend 'started ${env.JOB_NAME}  (http://15.222.239.12:8080/job/lms-eks/${env.BUILD_NUMBER}/)'", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+                slackSend channel: ' team-updates', message: "slackSend 'started ${env.JOB_NAME}  (http://35.182.242.54:8080/job/lms-eks/${env.BUILD_NUMBER}/)'", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
                 input message:'Approve to Deploy',ok: 'Yes'
             }
         }
