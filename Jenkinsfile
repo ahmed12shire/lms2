@@ -11,7 +11,7 @@ pipeline {
         stage('Sonar Analysis') {
             steps {
                 echo 'CODE QUALITY CHECK'
-                sh 'sudo docker run --rm -e SONAR_HOST_URL="http://15.222.239.12/:9000" -e SONAR_TOKEN="sqp_1cdd446e0fc471a2c8e8ed8fb9138801896aaa72" -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
+                sh 'sudo docker run --rm -e SONAR_HOST_URL="http://15.222.239.12:9000" -e SONAR_TOKEN="sqp_1cdd446e0fc471a2c8e8ed8fb9138801896aaa72" -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
                 echo 'CODE QUALITY DONE'
                 slackSend channel: 'eks', color: '#439FE0', message: 'Sonar Analysis completed', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
             }
