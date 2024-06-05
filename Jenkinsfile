@@ -35,7 +35,26 @@ pipeline {
             steps {
                slackSend channel: 'eks', color: '#439FE0', message: 'slackSend "started LMS production"', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
             }
+        }        
+        stage('Build backend Docker Image') {
+            steps {
+                script {
+                    echo 'Build backend Docker Image'
+                    def version = readFile("path/to/version/file").trim() // Read the version from a file
+                    // Incrementing the version number
+                    def versionParts = version.tokenize('.')
+                    int major = versionParts[0].toInteger()
+                    int minor = versionParts[1].toInteger()
+                    int patch = versionParts[2].toInteger() + 1
+                    def newVersion = "${major}.${minor}.${patch}"
+                    
+                    // Building and tagging the Docker image with the new version
+                    sh "cd api && sudo docker build --build-arg VERSION=${newVersion} -t ahmed12shire/lms-be:${newVersion} ."
+                    echo "Image build complete. Tagged as: ahmed12shire/lms-be:${newVersion}"
         }
+    }
+}
+
 //         stage('PostgreSQL deplyment & service') {
 //             steps {
 //                 script {
