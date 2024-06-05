@@ -2,11 +2,17 @@ pipeline {
     agent any
 
     stages {
-        post {
-            always {
-                slackSend channel: 'eks', color: '#439FE0', message: "Build ${currentBuild.currentResult} in ${env.JOB_NAME}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+        stage('nofity') {
+            steps {
+               slackSend channel: 'eks', color: '#439FE0', message: 'slackSend "produsction to start"', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+            }
         }
-    } 
+
+        post {
+        always {
+            slackSend channel: 'eks', color: '#439FE0', message: "Build ${currentBuild.currentResult} in ${env.JOB_NAME}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+        }
+    }  
     //     stage('Sonar Analysis') {
     //         steps {
     //             echo 'CODE QUALITY CHECK'
