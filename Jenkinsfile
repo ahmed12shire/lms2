@@ -2,12 +2,6 @@ pipeline {
     agent any
 
     stages {
-
-        stage('nofity') {
-            steps {
-               slackSend channel: 'lms-project', color: '#439FE0', message: 'slackSend "started LMS production"', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
-            }
-        }
         
         // stage('Sonar Analysis') {
         //     steps {
@@ -27,38 +21,21 @@ pipeline {
         //         }
         //     }
         // }
-//         stage('Deploy approval request') {
-//              steps {
-//                 script {
-//             // Send message to Slack for approval
-//             def approvalMessage = "Deployment approval needed from ahmed shire. Please approve or reject this deployment in Slack."
-//             def approvalResponse = slackSend(channel: 'lms-project', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend', message: approvalMessage)
-//             // Wait for 1 minute
-//             sleep(time: 1, unit: 'MINUTES')
-//             // Wait for approval
-//             def isApproved = waitForApproval(approvalResponse)
-
-//             if (isApproved) {
-//                 echo "Deployment approved. Proceeding to the next stage."
-//                 // Proceed to the next stage
-//                 // Insert your deployment steps here
-//             } else {
-//                 error "Deployment rejected. Aborting deployment process."
-//             }
-//         }
-//     }
-// }
-//     }
-// }
-//             def waitForApproval(approvalResponse) {
-//             // approvalResponse contains the text received from Slack
-//             if (approvalResponse.contains("approved")) {
-//             return true
-//             } else {
-//             return false
-//     }
-// }
-
+        stage('Approval') {
+            steps {
+                 script{
+                timeout(time: 5,unit: "MINUTES"){
+                slackSend channel: ' team-updates', message: "slackSend 'started ${env.JOB_NAME}  (http://15.222.239.12:8080/job/myjenkinspipeline2/${env.BUILD_NUMBER}/console)'", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+                input message:'Approve to Deploy',ok: 'Yes'
+            }
+        }
+    }
+}
+        stage('nofity') {
+            steps {
+               slackSend channel: 'eks', color: '#439FE0', message: 'slackSend "started LMS production"', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+            }
+        }
 //         stage('PostgreSQL deplyment & service') {
 //             steps {
 //                 script {
@@ -145,4 +122,3 @@ pipeline {
 //         }
     }
 }
-
