@@ -6,7 +6,7 @@ pipeline {
         stage('Sonar Analysis') {
             steps {
                 echo 'CODE QUALITY CHECK'
-                sh 'sudo docker run --rm -e SONAR_HOST_URL="http://3.99.221.240:9000" -e SONAR_TOKEN="sqp_3adee885ad8ed219b3a22db7bcd6320c362d1008" -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
+                sh 'sudo docker run --rm -e SONAR_HOST_URL="http://15.222.239.12/:9000" -e SONAR_TOKEN="sqp_1cdd446e0fc471a2c8e8ed8fb9138801896aaa72" -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
                 echo 'CODE QUALITY DONE'
             }
         }
@@ -58,15 +58,15 @@ pipeline {
                 }
             }
         }
-            stage('Build backend Docker Image') {
-                steps {
-                    script {
-                        echo 'Build backend Docker Image'
-                        def version = "1.0.${BUILD_NUMBER}" // You can use any versioning scheme here
-                        
-                        // Building and tagging the Docker image with the version number
-                        sh "cd api && sudo docker build --build-arg VERSION=${version} -t ahmed12shire/lms-be:${version} ."
-                        echo "Image build complete. Tagged as: ahmed12shire/lms-be:${version}"
+        stage('Build backend Docker Image') {
+            steps {
+                script {
+                    echo 'Build backend Docker Image'
+                    def version = "1.0.${BUILD_NUMBER}" 
+                    
+                    // Building and tagging the Docker image with the version number
+                    sh "cd api && sudo docker build --build-arg VERSION=${version} -t ahmed12shire/lms-be:${version} ."
+                    echo "Image build complete. Tagged as: ahmed12shire/lms-be:${version}"
                 }
             }
         } 
@@ -96,7 +96,7 @@ pipeline {
             steps {
                 script {
                     echo 'Build frontend Docker Image'
-                    def version = "1.0.${BUILD_NUMBER}" // You can use any versioning scheme here
+                    def version = "1.0.${BUILD_NUMBER}" 
                     
                     // Building and tagging the Docker image with the version number
                     sh "cd webapp && sudo docker build --build-arg VERSION=${version} -t ahmed12shire/lms-fe:${version} ."
