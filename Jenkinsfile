@@ -2,7 +2,11 @@ pipeline {
     agent any
 
     stages {
-        
+        post {
+        always {
+            slackSend channel: 'eks', color: '#439FE0', message: "Build ${currentBuild.currentResult} in ${env.JOB_NAME}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+        }
+    } 
     //     stage('Sonar Analysis') {
     //         steps {
     //             echo 'CODE QUALITY CHECK'
@@ -35,7 +39,13 @@ pipeline {
             steps {
                slackSend channel: 'eks', color: '#439FE0', message: 'slackSend "started LMS production"', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
             }
-        }        
+        }
+
+    //     post {
+    //     always {
+    //         slackSend channel: 'eks', color: '#439FE0', message: "Build ${currentBuild.currentResult} in ${env.JOB_NAME}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+    //     }
+    // }        
         // stage('PostgreSQL deplyment & service') {
         //     steps {
         //         script {
