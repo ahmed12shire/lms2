@@ -73,7 +73,7 @@ pipeline {
             steps {
                 script {
                     echo 'Build backend Docker Image'
-                    def version = "1.0.${BUILD_NUMBER}" 
+                    def version = "${BUILD_NUMBER}" 
                     
                     // Building and tagging the Docker image with the version number
                     sh "cd api && sudo docker build --build-arg VERSION=${version} -t ahmed12shire/lms-be:${version} ."
@@ -110,7 +110,7 @@ pipeline {
             steps {
                 script {
                     echo 'Build frontend Docker Image'
-                    def version = "1.0.${BUILD_NUMBER}" 
+                    def version = "${BUILD_NUMBER}" 
                     
                     // Building and tagging the Docker image with the version number
                     sh "cd webapp && sudo docker build --build-arg VERSION=${version} -t ahmed12shire/lms-fe:${version} ."
