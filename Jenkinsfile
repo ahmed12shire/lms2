@@ -2,11 +2,7 @@ pipeline {
     agent any
 
     stages {
-        pipeline {
-    agent any
-
-    stages {
-        stage('nofity') {
+       stage('nofity') {
             steps {
                 slackSend channel: 'eks', color: '#439FE0', message: 'slackSend "production to start"', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
             }
