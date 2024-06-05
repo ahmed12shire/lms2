@@ -36,19 +36,6 @@ pipeline {
                slackSend channel: 'eks', color: '#439FE0', message: 'slackSend "started LMS production"', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
             }
         }        
-        stage('Build backend Docker Image') {
-    steps {
-        script {
-            echo 'Build backend Docker Image'
-            def version = "1.0.${BUILD_NUMBER}" // You can use any versioning scheme here
-            
-            // Building and tagging the Docker image with the version number
-            sh "cd api && sudo docker build --build-arg VERSION=${version} -t ahmed12shire/lms-be:${version} ."
-            echo "Image build complete. Tagged as: ahmed12shire/lms-be:${version}"
-        }
-    }
-}
-
 //         stage('PostgreSQL deplyment & service') {
 //             steps {
 //                 script {
@@ -71,16 +58,18 @@ pipeline {
 //                 }
 //             }
 //         }
-//         stage('Build backend Docker Image') {
-//             steps {
-//                 script {
-//                     echo 'Build backend Docker Image'
-//                     def version = sh(script: "cd api && cat package.json | grep '\"version\"' | cut -d '\"' -f 4", returnStdout: true).trim()
-//                     sh "cd api && sudo docker build --build-arg VERSION=${version} -t ahmed12shire/lms-be ."
-//                     echo 'Image build complete'
-//                 }
-//             }
-//         }
+            stage('Build backend Docker Image') {
+                steps {
+                    script {
+                        echo 'Build backend Docker Image'
+                        def version = "1.0.${BUILD_NUMBER}" // You can use any versioning scheme here
+                        
+                        // Building and tagging the Docker image with the version number
+                        sh "cd api && sudo docker build --build-arg VERSION=${version} -t ahmed12shire/lms-be:${version} ."
+                        echo "Image build complete. Tagged as: ahmed12shire/lms-be:${version}"
+                    }
+                }
+                } 
 
 
 //         stage('Push backend Docker Image') {
