@@ -100,7 +100,7 @@ pipeline {
                     echo 'apply backend deplyment & service'
                     sh "cd api && kubectl apply -f backend-deployment.yml"
                     sh "cd api && kubectl apply -f backend-service.yml"
-                    echo 'Database container is running'
+                    echo 'Backend container is running'
                 }
                 slackSend channel: 'eks', color: '#439FE0', message: 'Backend deplyment & service complete', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
             }
