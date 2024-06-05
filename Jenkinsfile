@@ -36,6 +36,7 @@ pipeline {
                 input message:'Approve to Deploy',ok: 'Yes'
             }
         }
+            slackSend channel: 'eks', color: '#439FE0', message: 'request to build approved', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
     }
 }
         stage('nofity after approval') {
@@ -45,94 +46,101 @@ pipeline {
         }
 
         
-        // stage('PostgreSQL deplyment & service') {
-        //     steps {
-        //         script {
-        //             echo 'apply PostgreSQL deplyment & service'
-        //             sh ('aws eks update-kubeconfig --name lms --region ca-central-1')
-        //             sh "kubectl get pods"
-        //             sh "cd api && kubectl apply -f database-secret.yml"
-        //             sh "cd api && kubectl apply -f database-deployment.yml"
-        //             sh "cd api && kubectl apply -f database-sevice.yml"
-        //             echo 'Database container is running'
-        //         }
-        //     }
-        // }
+        stage('PostgreSQL deplyment & service') {
+            steps {
+                script {
+                    echo 'apply PostgreSQL deplyment & service'
+                    sh ('aws eks update-kubeconfig --name lms --region ca-central-1')
+                    sh "kubectl get pods"
+                    sh "cd api && kubectl apply -f database-secret.yml"
+                    sh "cd api && kubectl apply -f database-deployment.yml"
+                    sh "cd api && kubectl apply -f database-sevice.yml"
+                    echo 'Database container is running'
+                }
+               slackSend channel: 'eks', color: '#439FE0', message: 'PostgreSQL deplyment & service complete', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend' 
+            }
+        }
 
-        // stage('applying backend configMap ') {
-        //     steps {
-        //         script {
-        //             echo 'applying backend configMap'
-        //             sh "cd api && kubectl apply -f backend-configmap.yml"
-        //         }
-        //     }
-        // }
-        // stage('Build backend Docker Image') {
-        //     steps {
-        //         script {
-        //             echo 'Build backend Docker Image'
-        //             def version = "1.0.${BUILD_NUMBER}" 
+        stage('applying backend configMap ') {
+            steps {
+                script {
+                    echo 'applying backend configMap'
+                    sh "cd api && kubectl apply -f backend-configmap.yml"
+                }
+            }
+        }
+        stage('Build backend Docker Image') {
+            steps {
+                script {
+                    echo 'Build backend Docker Image'
+                    def version = "1.0.${BUILD_NUMBER}" 
                     
-        //             // Building and tagging the Docker image with the version number
-        //             sh "cd api && sudo docker build --build-arg VERSION=${version} -t ahmed12shire/lms-be:${version} ."
-        //             echo "Image build complete. Tagged as: ahmed12shire/lms-be:${version}"
-        //         }
-        //     }
-        // } 
+                    // Building and tagging the Docker image with the version number
+                    sh "cd api && sudo docker build --build-arg VERSION=${version} -t ahmed12shire/lms-be:${version} ."
+                    echo "Image build complete. Tagged as: ahmed12shire/lms-be:${version}"
+                }
+                slackSend channel: 'eks', color: '#439FE0', message: 'Backend docker build complete', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+            }
+        } 
 
 
-        // stage('Push backend Docker Image') {
-        //     steps {
-        //         script {
-        //             // Push Docker image
-        //             sh "docker push ahmed12shire/lms-be:${version}"
-        //         }
-        //     }
-        // }
+        stage('Push backend Docker Image') {
+            steps {
+                script {
+                    // Push Docker image
+                    sh "docker push ahmed12shire/lms-be:${version}"
+                }
+                slackSend channel: 'eks', color: '#439FE0', message: 'Backened imager pushed', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+            }
+        }
 
-        // stage('backend deplyment & service') {
-        //     steps {
-        //         script {
-        //             echo 'apply backend deplyment & service'
-        //             sh "cd api && kubectl apply -f backend-deployment.yml"
-        //             sh "cd api && kubectl apply -f backend-service.yml"
-        //             echo 'Database container is running'
-        //         }
-        //     }
-        // }
+        stage('backend deplyment & service') {
+            steps {
+                script {
+                    echo 'apply backend deplyment & service'
+                    sh "cd api && kubectl apply -f backend-deployment.yml"
+                    sh "cd api && kubectl apply -f backend-service.yml"
+                    echo 'Database container is running'
+                }
+                slackSend channel: 'eks', color: '#439FE0', message: 'Backend deplyment & service complete', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+            }
+        }
 
-        // stage('Build frontend Docker Image') {
-        //     steps {
-        //         script {
-        //             echo 'Build frontend Docker Image'
-        //             def version = "1.0.${BUILD_NUMBER}" 
+        stage('Build frontend Docker Image') {
+            steps {
+                script {
+                    echo 'Build frontend Docker Image'
+                    def version = "1.0.${BUILD_NUMBER}" 
                     
-        //             // Building and tagging the Docker image with the version number
-        //             sh "cd webapp && sudo docker build --build-arg VERSION=${version} -t ahmed12shire/lms-fe:${version} ."
-        //             echo "Image build complete. Tagged as: ahmed12shire/lms-fe:${version}"
-        //         }
-        //     }
-        // }
+                    // Building and tagging the Docker image with the version number
+                    sh "cd webapp && sudo docker build --build-arg VERSION=${version} -t ahmed12shire/lms-fe:${version} ."
+                    echo "Image build complete. Tagged as: ahmed12shire/lms-fe:${version}"
+                }
+                slackSend channel: 'eks', color: '#439FE0', message: 'Frontend docker build complete', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+            }
+        }
 
-        // stage('Push frontend Docker Image') {
-        //     steps {
-        //         script {
-        //             // Push Docker image
-        //             sh "docker push ahmed12shire/lms-fe:${version}"
-        //         }
-        //     }
-        // }
+        stage('Push frontend Docker Image') {
+            steps {
+                script {
+                    // Push Docker image
+                    sh "docker push ahmed12shire/lms-fe:${version}"
+                }
+                slackSend channel: 'eks', color: '#439FE0', message: 'Frontend imager pushed', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+            }
+        }
 
-        // stage('frontend deplyment & service') {
-        //     steps {
-        //         script {
-        //             echo 'apply frontend deplyment & service'
-        //             sh "cd api && kubectl apply -f frontend-deployment.yml"
-        //             sh "cd api && kubectl apply -f frontend-service.yml"
-        //             echo 'frontend container is running'
-        //         }
-        //     }
-        // }
+        stage('frontend deplyment & service') {
+            steps {
+                script {
+                    echo 'apply frontend deplyment & service'
+                    sh "cd api && kubectl apply -f frontend-deployment.yml"
+                    sh "cd api && kubectl apply -f frontend-service.yml"
+                    echo 'frontend container is running'
+                }
+                slackSend channel: 'eks', color: '#439FE0', message: 'Frontend deplyment & service complete', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+            }
+        }
         
     }
         post {
