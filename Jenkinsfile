@@ -136,11 +136,11 @@ pipeline {
         
     }
         post {
-        failure {
-            slackSend channel: 'eks', color: '#FF0000', message: "Pipeline failed: ${env.STAGE-NAME} - ${currentBuild.fullDisplayName}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+        FAILURE {
+            slackSend channel: 'eks', color: 'green', message: "Pipeline failed: ${env.STAGE-NAME} - ${currentBuild.fullDisplayName}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
         }
         success {
-            slackSend channel: 'eks', color: '#00FF00', message: "Pipeline succeeded: ${env.STAGE-NAME} - ${currentBuild.fullDisplayName}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+            slackSend channel: 'eks', color: 'red', message: "Pipeline succeeded: ${env.STAGE-NAME} - ${currentBuild.fullDisplayName}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
         }
     }
 }
