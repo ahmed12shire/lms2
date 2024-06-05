@@ -37,20 +37,14 @@ pipeline {
             }
         }        
         stage('Build backend Docker Image') {
-            steps {
-                script {
-                    echo 'Build backend Docker Image'
-                    def version = readFile("path/to/version/file").trim() // Read the version from a file
-                    // Incrementing the version number
-                    def versionParts = version.tokenize('.')
-                    int major = versionParts[0].toInteger()
-                    int minor = versionParts[1].toInteger()
-                    int patch = versionParts[2].toInteger() + 1
-                    def newVersion = "${major}.${minor}.${patch}"
-                    
-                    // Building and tagging the Docker image with the new version
-                    sh "cd api && sudo docker build --build-arg VERSION=${newVersion} -t ahmed12shire/lms-be:${newVersion} ."
-                    echo "Image build complete. Tagged as: ahmed12shire/lms-be:${newVersion}"
+    steps {
+        script {
+            echo 'Build backend Docker Image'
+            def version = "1.0.${BUILD_NUMBER}" // You can use any versioning scheme here
+            
+            // Building and tagging the Docker image with the version number
+            sh "cd api && sudo docker build --build-arg VERSION=${version} -t ahmed12shire/lms-be:${version} ."
+            echo "Image build complete. Tagged as: ahmed12shire/lms-be:${version}"
         }
     }
 }
