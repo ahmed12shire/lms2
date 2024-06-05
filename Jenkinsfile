@@ -25,7 +25,7 @@ pipeline {
             steps {
                  script{
                 timeout(time: 5,unit: "MINUTES"){
-                slackSend channel: ' team-updates', message: "slackSend 'started ${env.JOB_NAME}  (http://15.222.239.12:8080/job/lms-eks/${env.BUILD_NUMBER})'", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+                slackSend channel: ' team-updates', message: "slackSend 'started ${env.JOB_NAME}  (http://15.222.239.12:8080/job/lms-eks/${env.BUILD_NUMBER}/)'", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
                 input message:'Approve to Deploy',ok: 'Yes'
             }
         }
