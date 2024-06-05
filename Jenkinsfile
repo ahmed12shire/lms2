@@ -2,17 +2,41 @@ pipeline {
     agent any
 
     stages {
+        pipeline {
+    agent any
+
+    stages {
         stage('nofity') {
             steps {
-               slackSend channel: 'eks', color: '#439FE0', message: 'slackSend "produsction to start"', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+                slackSend channel: 'eks', color: '#439FE0', message: 'slackSend "production to start"', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
             }
         }
 
-        post {
+        stage('Approval') {
+            steps {
+                script {
+                    timeout(time: 5, unit: "MINUTES") {
+                        slackSend channel: 'team-updates', message: "slackSend 'started ${env.JOB_NAME}  (http://15.222.239.12:8080/job/lms-eks/${env.BUILD_NUMBER}/)'", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+                        input message: 'Approve to Deploy', ok: 'Yes'
+                    }
+                }
+            }
+        }
+
+        stage('nofity after approval') {
+            steps {
+                slackSend channel: 'eks', color: '#439FE0', message: 'slackSend "started LMS production"', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+            }
+        }
+    }
+
+    post {
         always {
             slackSend channel: 'eks', color: '#439FE0', message: "Build ${currentBuild.currentResult} in ${env.JOB_NAME}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
         }
-    }  
+    }
+}
+ 
     //     stage('Sonar Analysis') {
     //         steps {
     //             echo 'CODE QUALITY CHECK'
@@ -31,21 +55,21 @@ pipeline {
         //         }
         //     }
         // }
-        stage('Approval') {
-            steps {
-                 script{
-                timeout(time: 5,unit: "MINUTES"){
-                slackSend channel: ' team-updates', message: "slackSend 'started ${env.JOB_NAME}  (http://15.222.239.12:8080/job/lms-eks/${env.BUILD_NUMBER}/)'", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
-                input message:'Approve to Deploy',ok: 'Yes'
-            }
-        }
-    }
-}
-        stage('nofity after approval') {
-            steps {
-               slackSend channel: 'eks', color: '#439FE0', message: 'slackSend "started LMS production"', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
-            }
-        }
+//         stage('Approval') {
+//             steps {
+//                  script{
+//                 timeout(time: 5,unit: "MINUTES"){
+//                 slackSend channel: ' team-updates', message: "slackSend 'started ${env.JOB_NAME}  (http://15.222.239.12:8080/job/lms-eks/${env.BUILD_NUMBER}/)'", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+//                 input message:'Approve to Deploy',ok: 'Yes'
+//             }
+//         }
+//     }
+// }
+//         stage('nofity after approval') {
+//             steps {
+//                slackSend channel: 'eks', color: '#439FE0', message: 'slackSend "started LMS production"', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+//             }
+//         }
 
     //     post {
     //     always {
