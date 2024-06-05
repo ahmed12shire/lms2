@@ -67,16 +67,16 @@ pipeline {
                         // Building and tagging the Docker image with the version number
                         sh "cd api && sudo docker build --build-arg VERSION=${version} -t ahmed12shire/lms-be:${version} ."
                         echo "Image build complete. Tagged as: ahmed12shire/lms-be:${version}"
-                    }
                 }
-                } 
+            }
+        } 
 
 
 //         stage('Push backend Docker Image') {
 //             steps {
 //                 script {
 //                     // Push Docker image
-//                     sh "docker push ahmed12shire/lms-be"
+//                     sh "docker push ahmed12shire/lms-be:${version}"
 //                 }
 //             }
 //         }
@@ -93,12 +93,14 @@ pipeline {
 //         }
 
 //         stage('Build frontend Docker Image') {
-//             steps {
-//                 script {
-//                     echo 'Build Docker Backend Image'
-//                     def version = sh(script: "cd webapp && cat package.json | grep '\"version\"' | cut -d '\"' -f 4", returnStdout: true).trim()
-//                     sh "cd webapp && docker build --build-arg VERSION=${version} -t ahmed12shire/lms-fe ."
-//                     echo 'Image build complete'
+            steps {
+                script {
+                    echo 'Build frontend Docker Image'
+                    def version = "1.0.${BUILD_NUMBER}" // You can use any versioning scheme here
+                    
+                    // Building and tagging the Docker image with the version number
+                    sh "cd webapp && sudo docker build --build-arg VERSION=${version} -t ahmed12shire/lms-fe:${version} ."
+                    echo "Image build complete. Tagged as: ahmed12shire/lms-fe:${version}"
 //                 }
 //             }
 //         }
@@ -107,7 +109,7 @@ pipeline {
 //             steps {
 //                 script {
 //                     // Push Docker image
-//                     sh "docker push ahmed12shire/lms-fe"
+//                     sh "docker push ahmed12shire/lms-fe:${version}"
 //                 }
 //             }
 //         }
