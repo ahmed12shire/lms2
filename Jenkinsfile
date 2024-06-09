@@ -148,12 +148,25 @@ pipeline {
         }
         
     }
+    //     post {
+    //     failure {
+    //         slackSend channel: 'eks', color: 'green', message: "Pipeline failed: ${currentBuild.fullDisplayName} - ${env.STAGE_NAME}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+    //     }
+    //     success {
+    //         slackSend channel: 'eks', color: 'red', message: "Pipeline succeeded: ${currentBuild.fullDisplayName} - ${env.STAGE_NAME}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+    //     }
         post {
-        failure {
-            slackSend channel: 'eks', color: 'green', message: "Pipeline failed: ${currentBuild.fullDisplayName} - ${env.STAGE_NAME}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
-        }
-        success {
-            slackSend channel: 'eks', color: 'red', message: "Pipeline succeeded: ${currentBuild.fullDisplayName} - ${env.STAGE_NAME}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
-        }
+            always {
+                script {
+                    def logFilePath = "${env.WORKSPACE}/build-log.txt"
+                    writeFile file: logFilePath, text: currentBuild.rawBuild.getLogFile().getText()
+                    slackUploadFile(
+                        channels: 'eks',
+                        file: logFilePath,
+                        initialComment: "Build Log",
+                        tokenCredentialId: 'slacksend'
+                    )
+                }
+            }
     }
 }
