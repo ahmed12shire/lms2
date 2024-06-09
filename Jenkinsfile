@@ -180,9 +180,7 @@ pipeline {
                     tokenCredentialId: 'slacksend'
                 )
                      
-            }       catch (Exception e) {
-                    println("Failed to read console output: ${e.message}")
-                }
+            }       
         }
     }
 }
