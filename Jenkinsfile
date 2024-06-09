@@ -156,17 +156,17 @@ pipeline {
     //         slackSend channel: 'eks', color: 'red', message: "Pipeline succeeded: ${currentBuild.fullDisplayName} - ${env.STAGE_NAME}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
     //     }
         post {
-            always {
-                script {
-                    def logFilePath = "${env.WORKSPACE}/build-log.txt"
-                    writeFile file: logFilePath, text: currentBuild.rawBuild.getLogFile().getText()
-                    slackUploadFile(
-                        channels: 'eks',
-                        file: logFilePath,
-                        initialComment: "Build Log",
-                        tokenCredentialId: 'slacksend'
-                    )
-                }
+        always {
+            script {
+                def logFilePath = "${env.WORKSPACE}/build-log.txt"
+                def consoleOutput = currentBuild.rawBuild.getLogFile().getText()
+                writeFile file: logFilePath, text: consoleOutput
+                slackUploadScriptFile(logFilePath)
             }
+        }
     }
+}
+def slackUploadScriptFile(filePath) {
+    def command = "curl -F file=@${filePath} -F channels=eks -F token=${env.slack_token} https://slack.com/api/files.upload"
+    sh command
 }
