@@ -158,10 +158,10 @@ pipeline {
         post {
         always {
             script {
-                def consoleOutput = consoleText
+                def consoleOutput = currentBuild.rawBuild.getLog(null).getLog()
                 slackSend(
                     color: '#439FE0',
-                    message: "```${consoleText}```",
+                    message: "Build Console Output:\n```${consoleOutput}```",
                     channel: 'eks',
                     teamDomain: 'devops-rkv5493',
                     tokenCredentialId: 'slacksend'
