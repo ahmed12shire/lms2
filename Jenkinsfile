@@ -11,7 +11,7 @@ pipeline {
         stage('Sonar Analysis') {
             steps {
                 echo 'CODE QUALITY CHECK'
-                sh 'sudo docker run --rm -e SONAR_HOST_URL="http://35.182.242.54:9000" -e SONAR_TOKEN="sqp_40decc8be7549a419301a10af4ec6f924f3a36d9" -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
+                sh 'sudo docker run --rm -e SONAR_HOST_URL="http://3.96.170.219:9000" -e SONAR_TOKEN="sqp_40decc8be7549a419301a10af4ec6f924f3a36d9" -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
                 echo 'CODE QUALITY DONE'
                 slackSend channel: 'eks', color: '#439FE0', message: 'Sonar Analysis completed', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
             }
@@ -32,7 +32,7 @@ pipeline {
             steps {
                  script{
                 timeout(time: 5,unit: "MINUTES"){
-                slackSend channel: ' team-updates', message: "slackSend 'started ${env.JOB_NAME}  (http://35.182.242.54:8080/job/lms-eks/${env.BUILD_NUMBER}/)'", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+                slackSend channel: ' team-updates', message: "slackSend 'started ${env.JOB_NAME}  (http://3.96.170.219:8080/job/lms-eks/${env.BUILD_NUMBER}/)'", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
                 input message:'Approve to Deploy',ok: 'Yes'
             }
         }
@@ -50,7 +50,6 @@ pipeline {
             steps {
                 script {
                     echo 'apply PostgreSQL deplyment & service'
-                    sh ('aws eks update-kubeconfig --name lms --region ca-central-1')
                     sh "kubectl get pods"
                     sh "cd api && kubectl apply -f database-secret.yml"
                     sh "cd api && kubectl apply -f database-deployment.yml"
@@ -139,6 +138,12 @@ pipeline {
                     echo 'frontend container is running'
                 }
                 slackSend channel: 'eks', color: '#439FE0', message: 'Frontend deplyment & service complete', teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
+            }
+        }
+
+        stage('log file') {
+            steps {
+                slackSend channel: 'eks', color: '#439FE0', message: "Build Log:\n```${currentBuild.rawBuild.getLogFile().readLines().join('\n')}```", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
             }
         }
         
