@@ -158,15 +158,16 @@ pipeline {
         post {
         always {
             script {
-                def logFilePath = "${env.WORKSPACE}/build-log.txt"
-                def consoleOutput = currentBuild.rawBuild.getLogFile().getText()
-                writeFile file: logFilePath, text: consoleOutput
-                slackUploadScriptFile(logFilePath)
+                def consoleOutput = currentBuild.rawBuild.getLog(null).getLog()
+                slackSend(
+                    color: '#439FE0',
+                    message: "```${consoleOutput}```",
+                    channel: 'eks',
+                    teamDomain: 'devops-rkv5493',
+                    tokenCredentialId: 'slacksend'
+                )
             }
         }
     }
 }
-def slackUploadScriptFile(filePath) {
-    def command = "curl -F file=@${filePath} -F channels=eks -F token=${env.slack_token} https://slack.com/api/files.upload"
-    sh command
-}
+
