@@ -179,9 +179,10 @@ pipeline {
                     teamDomain: 'devops-rkv5493',
                     tokenCredentialId: 'slacksend'
                 )
-                    
-            }catch (Exception e) {
-                        println("Failed to read console output: ${e.message}")
+                     
+            }       catch (Exception e) {
+                    println("Failed to read console output: ${e.message}")
+                }
         }
     }
 }
