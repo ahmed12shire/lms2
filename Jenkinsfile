@@ -158,7 +158,17 @@ pipeline {
         post {
         always {
             script {
-                def consoleOutput = currentBuild.rawBuild.getLog(null).getLog()
+                def consoleOutput = ""
+                // Get console output
+                def logFile = readFile "${env.BUILD_URL}/consoleText"
+                // Truncate the log if it's too long to avoid Slack message size limits
+                if (logFile.size() > 100000) {
+                    consoleOutput = logFile.readLines().takeRight(500).join('\n')
+                    consoleOutput += "\n...(truncated)"
+                } else {
+                    consoleOutput = logFile
+                }
+                // Send console output to Slack
                 slackSend(
                     color: '#439FE0',
                     message: "Build Console Output:\n```${consoleOutput}```",
