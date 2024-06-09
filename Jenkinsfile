@@ -159,23 +159,28 @@ pipeline {
         always {
             script {
                 def consoleOutput = ""
-                // Get console output
-                def logFile = readFile "${env.BUILD_URL}/consoleText"
-                // Truncate the log if it's too long to avoid Slack message size limits
-                if (logFile.size() > 100000) {
-                    consoleOutput = logFile.readLines().takeRight(500).join('\n')
-                    consoleOutput += "\n...(truncated)"
-                } else {
-                    consoleOutput = logFile
-                }
-                // Send console output to Slack
-                slackSend(
-                    color: '#439FE0',
-                    message: "Build Console Output:\n```${consoleOutput}```",
+                // Construct console text URL
+                def consoleUrl = "${env.BUILD_URL}consoleText"
+                try {
+                    // Get console output
+                    def logFile = sh(script: "curl -s ${consoleUrl}", returnStdout: true)
+                    // Truncate the log if it's too long to avoid Slack message size limits
+                    if (logFile.size() > 100000) {
+                        consoleOutput = logFile.readLines().takeRight(500).join('\n')
+                        consoleOutput += "\n...(truncated)"
+                    } else {
+                        consoleOutput = logFile
+                    }
+                    // Send console output to Slack
+                    slackSend(
+                        color: '#439FE0',
+                        message: "Build Console Output:\n```${consoleOutput}```",
                     channel: 'eks',
                     teamDomain: 'devops-rkv5493',
                     tokenCredentialId: 'slacksend'
                 )
+                    catch (Exception e) {
+                        println("Failed to read console output: ${e.message}")
             }
         }
     }
