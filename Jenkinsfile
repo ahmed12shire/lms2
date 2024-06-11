@@ -142,13 +142,7 @@ pipeline {
         }
         
     }
-    //     post {
-    //     failure {
-    //         slackSend channel: 'eks', color: 'green', message: "Pipeline failed: ${currentBuild.fullDisplayName} - ${env.STAGE_NAME}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
-    //     }
-    //     success {
-    //         slackSend channel: 'eks', color: 'red', message: "Pipeline succeeded: ${currentBuild.fullDisplayName} - ${env.STAGE_NAME}", teamDomain: 'devops-rkv5493', tokenCredentialId: 'slacksend'
-    //     }
+
         post {
         always {
             script {
@@ -170,6 +164,6 @@ pipeline {
                       println("Failed to read console output: ${e.message}")
         }
     }
-}
-}
+    }
+    }
 }
